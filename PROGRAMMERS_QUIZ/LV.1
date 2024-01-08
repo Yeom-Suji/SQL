@@ -575,6 +575,151 @@ ORDER BY PUBLISHED_DATE;
 
 
 
+Q16 문제 설명
+다음은 어느 자동차 대여 회사에서 대여중인 자동차들의 정보를 담은 CAR_RENTAL_COMPANY_CAR 테이블입니다. CAR_RENTAL_COMPANY_CAR 테이블은 아래와 같은 구조로 되어있으며, CAR_ID, CAR_TYPE, DAILY_FEE, OPTIONS 는 각각 자동차 ID, 자동차 종류, 일일 대여 요금(원), 자동차 옵션 리스트를 나타냅니다.
+
+Column name	Type	Nullable
+CAR_ID	INTEGER	FALSE
+CAR_TYPE	VARCHAR(255)	FALSE
+DAILY_FEE	INTEGER	FALSE
+OPTIONS	VARCHAR(255)	FALSE
+자동차 종류는 '세단', 'SUV', '승합차', '트럭', '리무진' 이 있습니다. 자동차 옵션 리스트는 콤마(',')로 구분된 키워드 리스트(예: '열선시트', '스마트키', '주차감지센서')로 되어있으며, 키워드 종류는 '주차감지센서', '스마트키', '네비게이션', '통풍시트', '열선시트', '후방카메라', '가죽시트' 가 있습니다.
+
+문제
+CAR_RENTAL_COMPANY_CAR 테이블에서 자동차 종류가 'SUV'인 자동차들의 평균 일일 대여 요금을 출력하는 SQL문을 작성해주세요. 이때 평균 일일 대여 요금은 소수 첫 번째 자리에서 반올림하고, 컬럼명은 AVERAGE_FEE 로 지정해주세요.
+
+예시
+예를 들어 CAR_RENTAL_COMPANY_CAR 테이블이 다음과 같다면
+
+CAR_ID	CAR_TYPE	DAILY_FEE	OPTIONS
+1	세단	16000	가죽시트,열선시트,후방카메라
+2	SUV	14000	스마트키,네비게이션,열선시트
+3	SUV	22000	주차감지센서,후방카메라,가죽시트
+'SUV' 에 해당하는 자동차들의 평균 일일 대여 요금은 18,000 원 이므로, 다음과 같은 결과가 나와야 합니다.
+
+AVERAGE_FEE
+18000
+
+
+-- 코드를 입력하세요
+SELECT ROUND(AVG(DAILY_FEE),0) AS AVERAGE_FEE
+FROM CAR_RENTAL_COMPANY_CAR
+WHERE CAR_TYPE = 'SUV' ;
+
+
+
+
+Q17 문제 설명
+ANIMAL_INS 테이블은 동물 보호소에 들어온 동물의 정보를 담은 테이블입니다. ANIMAL_INS 테이블 구조는 다음과 같으며, ANIMAL_ID, ANIMAL_TYPE, DATETIME, INTAKE_CONDITION, NAME, SEX_UPON_INTAKE는 각각 동물의 아이디, 생물 종, 보호 시작일, 보호 시작 시 상태, 이름, 성별 및 중성화 여부를 나타냅니다.
+
+NAME	TYPE	NULLABLE
+ANIMAL_ID	VARCHAR(N)	FALSE
+ANIMAL_TYPE	VARCHAR(N)	FALSE
+DATETIME	DATETIME	FALSE
+INTAKE_CONDITION	VARCHAR(N)	FALSE
+NAME	VARCHAR(N)	TRUE
+SEX_UPON_INTAKE	VARCHAR(N)	FALSE
+동물 보호소에 들어온 모든 동물의 정보를 ANIMAL_ID순으로 조회하는 SQL문을 작성해주세요. SQL을 실행하면 다음과 같이 출력되어야 합니다.
+
+ANIMAL_ID	ANIMAL_TYPE	DATETIME	INTAKE_CONDITION	NAME	SEX_UPON_INTAKE
+A349996	Cat	2018-01-22 14:32:00	Normal	Sugar	Neutered Male
+A350276	Cat	2017-08-13 13:50:00	Normal	Jewel	Spayed Female
+A350375	Cat	2017-03-06 15:01:00	Normal	Meo	Neutered Male
+A352555	Dog	2014-08-08 04:20:00	Normal	Harley	Spayed Female
+
+-- 코드를 입력하세요
+SELECT *
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID;
+
+
+
+
+Q18 문제 설명
+다음은 아이스크림 가게의 상반기 주문 정보를 담은 FIRST_HALF 테이블과 아이스크림 성분에 대한 정보를 담은 ICECREAM_INFO 테이블입니다. FIRST_HALF 테이블 구조는 다음과 같으며, SHIPMENT_ID, FLAVOR, TOTAL_ORDER 는 각각 아이스크림 공장에서 아이스크림 가게까지의 출하 번호, 아이스크림 맛, 상반기 아이스크림 총주문량을 나타냅니다. FIRST_HALF 테이블의 기본 키는 FLAVOR입니다.
+
+NAME	TYPE	NULLABLE
+SHIPMENT_ID	INT(N)	FALSE
+FLAVOR	VARCHAR(N)	FALSE
+TOTAL_ORDER	INT(N)	FALSE
+ICECREAM_INFO 테이블 구조는 다음과 같으며, FLAVOR, INGREDITENT_TYPE 은 각각 아이스크림 맛, 아이스크림의 성분 타입을 나타냅니다. INGREDIENT_TYPE에는 아이스크림의 주 성분이 설탕이면 sugar_based라고 입력되고, 아이스크림의 주 성분이 과일이면 fruit_based라고 입력됩니다. ICECREAM_INFO의 기본 키는 FLAVOR입니다. ICECREAM_INFO테이블의 FLAVOR는 FIRST_HALF 테이블의 FLAVOR의 외래 키입니다.
+
+NAME	TYPE	NULLABLE
+FLAVOR	VARCHAR(N)	FALSE
+INGREDIENT_TYPE	VARCHAR(N)	FALSE
+문제
+상반기 아이스크림 총주문량이 3,000보다 높으면서 아이스크림의 주 성분이 과일인 아이스크림의 맛을 총주문량이 큰 순서대로 조회하는 SQL 문을 작성해주세요.
+
+예시
+예를 들어 FIRST_HALF 테이블이 다음과 같고
+
+SHIPMENT_ID	FLAVOR	TOTAL_ORDER
+101	chocolate	3200
+102	vanilla	2800
+103	mint_chocolate	1700
+104	caramel	2600
+105	white_chocolate	3100
+106	peach	2450
+107	watermelon	2150
+108	mango	2900
+109	strawberry	3100
+110	melon	3150
+111	orange	2900
+112	pineapple	2900
+ICECREAM_INFO 테이블이 다음과 같다면
+
+FLAVOR	INGREDIENT_TYPE
+chocolate	sugar_based
+vanilla	sugar_based
+mint_chocolate	sugar_based
+caramel	sugar_based
+white_chocolate	sugar_based
+peach	fruit_based
+watermelon	fruit_based
+mango	fruit_based
+strawberry	fruit_based
+melon	fruit_based
+orange	fruit_based
+pineapple	fruit_based
+상반기 아이스크림 총주문량이 3,000보다 높은 아이스크림 맛은 chocolate, strawberry, melon, white_chocolate입니다. 이 중에 아이스크림의 주 성분이 과일인 아이스크림 맛은 strawberry와 melon이고 총주문량이 큰 순서대로 아이스크림 맛을 조회하면 melon, strawberry 순으로 조회되어야 합니다. 따라서 SQL 문을 실행하면 다음과 같이 나와야 합니다.
+
+FLAVOR
+melon
+strawberry
+
+
+
+INNERJOIN VER -- 코드를 입력하세요
+SELECT I.FLAVOR
+FROM ICECREAM_INFO AS I
+INNER JOIN FIRST_HALF AS F ON I.FLAVOR = F.FLAVOR
+WHERE F.TOTAL_ORDER > 3000 AND I.INGREDIENT_TYPE LIKE 'fruit%'
+ORDER BY F.TOTAL_ORDER DESC;
+
+SUBQuery -- 코드를 입력하세요
+SELECT flavor
+FROM first_half
+WHERE total_order > 3000
+AND flavor IN (SELECT flavor
+              FROM icecream_info
+              WHERE ingredient_type = 'fruit_based')
+ORDER BY total_order desc;
+
+
+
+
+Q19
+
+
+
+Q20
+
+
+Q21
+
+
+Q22
+
 
 
 
