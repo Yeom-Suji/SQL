@@ -16,4 +16,7 @@ Currently using MySQL and Oracle...🛠
 <br/>
 
 > [Lev1 완료](https://github.com/Yeom-Suji/SQL/blob/main/PROGRAMMERS_QUIZ/LV.1)<br/>
+
+
+**Lev.2**
 > [Lev2 진행중](https://github.com/Yeom-Suji/SQL/blob/main/PROGRAMMERS_QUIZ/LV.2)<br/>
