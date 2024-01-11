@@ -393,11 +393,235 @@ ORDER BY ANIMAL_ID;
 
 
 
-Q11
-Q12
-Q13
-Q14
-Q15
+Q11 문제 설명
+ANIMAL_INS 테이블은 동물 보호소에 들어온 동물의 정보를 담은 테이블입니다. ANIMAL_INS 테이블 구조는 다음과 같으며, ANIMAL_ID, ANIMAL_TYPE, DATETIME, INTAKE_CONDITION, NAME, SEX_UPON_INTAKE는 각각 동물의 아이디, 생물 종, 보호 시작일, 보호 시작 시 상태, 이름, 성별 및 중성화 여부를 나타냅니다.
+
+NAME	TYPE	NULLABLE
+ANIMAL_ID	VARCHAR(N)	FALSE
+ANIMAL_TYPE	VARCHAR(N)	FALSE
+DATETIME	DATETIME	FALSE
+INTAKE_CONDITION	VARCHAR(N)	FALSE
+NAME	VARCHAR(N)	TRUE
+SEX_UPON_INTAKE	VARCHAR(N)	FALSE
+동물 보호소에 들어온 동물 중 고양이와 개가 각각 몇 마리인지 조회하는 SQL문을 작성해주세요. 이때 고양이를 개보다 먼저 조회해주세요.
+
+예시
+예를 들어 ANIMAL_INS 테이블이 다음과 같다면
+
+ANIMAL_ID	ANIMAL_TYPE	DATETIME	INTAKE_CONDITION	NAME	SEX_UPON_INTAKE
+A373219	Cat	2014-07-29 11:43:00	Normal	Ella	Spayed Female
+A377750	Dog	2017-10-25 17:17:00	Normal	Lucy	Spayed Female
+A354540	Cat	2014-12-11 11:48:00	Normal	Tux	Neutered Male
+고양이는 2마리, 개는 1마리 들어왔습니다. 따라서 SQL문을 실행하면 다음과 같이 나와야 합니다.
+
+ANIMAL_TYPE	count
+Cat	2
+Dog	1
+
+
+-- 코드를 입력하세요
+SELECT ANIMAL_TYPE, COUNT(*) AS COUNT
+FROM ANIMAL_INS
+WHERE ANIMAL_TYPE = 'CAT' OR ANIMAL_TYPE = 'DOG'
+GROUP BY ANIMAL_TYPE
+ORDER BY FIELD(ANIMAL_TYPE, 'CAT', 'DOG');
+
+
+SELECT 'Cat' AS ANIMAL_TYPE, COUNT(*) FROM ANIMAL_INS 
+WHERE ANIMAL_TYPE = 'Cat'
+UNION
+SELECT 'Dog' AS ANIMAL_TPYE, COUNT(*) FROM ANIMAL_INS 
+WHERE ANIMAL_TYPE = 'Dog';
+
+
+
+
+
+Q12 문제 설명
+다음은 종합병원의 진료 예약정보를 담은 APPOINTMENT 테이블 입니다.
+APPOINTMENT 테이블은 다음과 같으며 APNT_YMD, APNT_NO, PT_NO, MCDP_CD, MDDR_ID, APNT_CNCL_YN, APNT_CNCL_YMD는 각각 진료예약일시, 진료예약번호, 환자번호, 진료과코드, 의사ID, 예약취소여부, 예약취소날짜를 나타냅니다.
+
+Column name	Type	Nullable
+APNT_YMD	TIMESTAMP	FALSE
+APNT_NO	NUMBER(5)	FALSE
+PT_NO	VARCHAR(10)	FALSE
+MCDP_CD	VARCHAR(6)	FALSE
+MDDR_ID	VARCHAR(10)	FALSE
+APNT_CNCL_YN	VARCHAR(1)	TRUE
+APNT_CNCL_YMD	DATE	TRUE
+문제
+APPOINTMENT 테이블에서 2022년 5월에 예약한 환자 수를 진료과코드 별로 조회하는 SQL문을 작성해주세요. 이때, 컬럼명은 '진료과 코드', '5월예약건수'로 지정해주시고 결과는 진료과별 예약한 환자 수를 기준으로 오름차순 정렬하고, 예약한 환자 수가 같다면 진료과 코드를 기준으로 오름차순 정렬해주세요.
+
+예시
+APPOINTMENT 테이블이 다음과 같을 때
+
+APNT_YMD	APNT_NO	PT_NO	MCDP_CD	MDDR_ID	APNT_CNCL_YN	APNT_CNCL_YMD
+2022-04-14 09:30:00.000000	47	PT22000064	GS	DR20170123	N	NULL
+2022-04-15 10:30:00.000000	48	PT22000065	OB	DR20100231	N	NULL
+2022-05-15 17:30:00.000000	49	PT22000086	OB	DR20100231	N	NULL
+2022-05-18 10:30:00.000000	52	PT22000019	GS	DR20100039	N	NULL
+2022-05-19 12:00:00.000000	53	PT22000020	FM	DR20010112	N	NULL
+2022-05-22 08:30:00.000000	54	PT22000021	GS	DR20100039	N	NULL
+2022-05-04 10:30:00.000000	56	PT22000023	FM	DR20090112	N	NULL
+2022-05-14 15:30:00.000000	57	PT22000074	CS	DR20200012	N	NULL
+2022-05-24 15:30:00.000000	58	PT22000085	CS	DR20200012	N	NULL
+2022-05-28 10:00:00.000000	60	PT22000092	OS	DR20100031	N	NULL
+SQL을 실행하면 다음과 같이 출력되어야 합니다.
+
+진료과코드	5월예약건수
+OB	1
+OS	1
+CS	2
+FM	2
+GS	2
+
+
+
+-- 코드를 입력하세요
+SELECT MCDP_CD AS '진료과코드', COUNT(*) AS '5월예약건수'
+FROM APPOINTMENT
+WHERE APNT_YMD LIKE "2022-05-%"
+GROUP BY MCDP_CD
+ORDER BY 2, 1;
+
+
+
+
+Q13 문제 설명
+ANIMAL_OUTS 테이블은 동물 보호소에서 입양 보낸 동물의 정보를 담은 테이블입니다. ANIMAL_OUTS 테이블 구조는 다음과 같으며, ANIMAL_ID, ANIMAL_TYPE, DATETIME, NAME, SEX_UPON_OUTCOME는 각각 동물의 아이디, 생물 종, 입양일, 이름, 성별 및 중성화 여부를 나타냅니다.
+
+NAME	TYPE	NULLABLE
+ANIMAL_ID	VARCHAR(N)	FALSE
+ANIMAL_TYPE	VARCHAR(N)	FALSE
+DATETIME	DATETIME	FALSE
+NAME	VARCHAR(N)	TRUE
+SEX_UPON_OUTCOME	VARCHAR(N)	FALSE
+보호소에서는 몇 시에 입양이 가장 활발하게 일어나는지 알아보려 합니다. 09:00부터 19:59까지, 각 시간대별로 입양이 몇 건이나 발생했는지 조회하는 SQL문을 작성해주세요. 이때 결과는 시간대 순으로 정렬해야 합니다.
+
+예시
+SQL문을 실행하면 다음과 같이 나와야 합니다.
+
+HOUR	COUNT
+9	1
+10	2
+11	13
+12	10
+13	14
+14	9
+15	7
+16	10
+17	12
+18	16
+19	2
+
+-- 코드를 입력하세요
+SELECT HOUR(DATETIME) AS HOUR, COUNT(*) AS COUNT
+FROM ANIMAL_OUTS
+WHERE HOUR(DATETIME) BETWEEN 9 AND 19
+GROUP BY HOUR
+ORDER BY HOUR;
+
+
+
+Q14 문제 설명
+다음은 어느 자동차 대여 회사에서 대여중인 자동차들의 정보를 담은 CAR_RENTAL_COMPANY_CAR 테이블입니다. CAR_RENTAL_COMPANY_CAR 테이블은 아래와 같은 구조로 되어있으며, CAR_ID, CAR_TYPE, DAILY_FEE, OPTIONS 는 각각 자동차 ID, 자동차 종류, 일일 대여 요금(원), 자동차 옵션 리스트를 나타냅니다.
+
+Column name	Type	Nullable
+CAR_ID	INTEGER	FALSE
+CAR_TYPE	VARCHAR(255)	FALSE
+DAILY_FEE	INTEGER	FALSE
+OPTIONS	VARCHAR(255)	FALSE
+자동차 종류는 '세단', 'SUV', '승합차', '트럭', '리무진' 이 있습니다. 자동차 옵션 리스트는 콤마(',')로 구분된 키워드 리스트(옵션 리스트 값 예시: '열선시트', '스마트키', '주차감지센서')로 되어있으며, 키워드 종류는 '주차감지센서', '스마트키', '네비게이션', '통풍시트', '열선시트', '후방카메라', '가죽시트' 가 있습니다.
+
+문제
+CAR_RENTAL_COMPANY_CAR 테이블에서 '통풍시트', '열선시트', '가죽시트' 중 하나 이상의 옵션이 포함된 자동차가 자동차 종류 별로 몇 대인지 출력하는 SQL문을 작성해주세요. 이때 자동차 수에 대한 컬럼명은 CARS로 지정하고, 결과는 자동차 종류를 기준으로 오름차순 정렬해주세요.
+
+예시
+예를 들어 CAR_RENTAL_COMPANY_CAR 테이블이 다음과 같다면
+
+CAR_ID	CAR_TYPE	DAILY_FEE	OPTIONS
+1	세단	16000	가죽시트,열선시트,후방카메라
+2	SUV	14000	스마트키,네비게이션,열선시트
+3	SUV	22000	주차감지센서,후방카메라
+4	트럭	35000	주차감지센서,네비게이션,열선시트
+5	SUV	16000	가죽시트,네비게이션,열선시트,후방카메라,주차감지센서
+'통풍시트', '열선시트', '가죽시트' 중 하나 이상의 옵션이 포함된 자동차는 자동차 ID가 1, 2, 4, 5인 자동차이고, 자동차 종류 별로 몇 대인지 구하고 자동차 종류를 기준으로 오름차순 정렬하면 다음과 같은 결과가 나와야 합니다.
+
+CAR_TYPE	CARS
+SUV	2
+세단	1
+트럭	1
+
+
+-- 코드를 입력하세요
+SELECT CAR_TYPE, COUNT(*) AS CARS
+FROM CAR_RENTAL_COMPANY_CAR
+WHERE OPTIONS LIKE '%시트%'
+GROUP BY CAR_TYPE
+ORDER BY CAR_TYPE;
+
+
+
+Q15 문제 설명
+다음은 어느 의류 쇼핑몰에서 판매중인 상품들의 상품 정보를 담은 PRODUCT 테이블과 오프라인 상품 판매 정보를 담은 OFFLINE_SALE 테이블 입니다. PRODUCT 테이블은 아래와 같은 구조로 PRODUCT_ID, PRODUCT_CODE, PRICE는 각각 상품 ID, 상품코드, 판매가를 나타냅니다.
+
+Column name	Type	Nullable
+PRODUCT_ID	INTEGER	FALSE
+PRODUCT_CODE	VARCHAR(8)	FALSE
+PRICE	INTEGER	FALSE
+상품 별로 중복되지 않는 8자리 상품코드 값을 가지며, 앞 2자리는 카테고리 코드를 의미합니다.
+
+OFFLINE_SALE 테이블은 아래와 같은 구조로 되어있으며 OFFLINE_SALE_ID, PRODUCT_ID, SALES_AMOUNT, SALES_DATE는 각각 오프라인 상품 판매 ID, 상품 ID, 판매량, 판매일을 나타냅니다.
+
+Column name	Type	Nullable
+OFFLINE_SALE_ID	INTEGER	FALSE
+PRODUCT_ID	INTEGER	FALSE
+SALES_AMOUNT	INTEGER	FALSE
+SALES_DATE	DATE	FALSE
+동일한 날짜, 상품 ID 조합에 대해서는 하나의 판매 데이터만 존재합니다.
+
+문제
+PRODUCT 테이블과 OFFLINE_SALE 테이블에서 상품코드 별 매출액(판매가 * 판매량) 합계를 출력하는 SQL문을 작성해주세요. 결과는 매출액을 기준으로 내림차순 정렬해주시고 매출액이 같다면 상품코드를 기준으로 오름차순 정렬해주세요.
+
+예시
+예를 들어 PRODUCT 테이블이 다음과 같고
+
+PRODUCT_ID	PRODUCT_CODE	PRICE
+1	A1000011	15000
+2	A1000045	8000
+3	C3000002	42000
+OFFLINE_SALE 테이블이 다음과 같다면
+
+OFFLINE_SALE_ID	PRODUCT_ID	SALES_AMOUNT	SALES_DATE
+1	1	2	2022-02-21
+2	1	2	2022-03-02
+3	3	3	2022-05-01
+4	2	1	2022-05-24
+5	1	2	2022-07-14
+6	2	1	2022-09-22
+각 상품 별 총 판매량과 판매가는 다음과 같습니다.
+
+PRODUCT_CODE 가 A1000011인 상품은 총 판매량이 6개, 판매가가 15,000원
+PRODUCT_CODE 가 A1000045인 상품은 총 판매량이 2개, 판매가가 8,000원
+PRODUCT_CODE 가 C3000002인 상품은 총 판매량이 3개, 판매가가 42,000원
+그러므로 각 상품 별 매출액을 계산하고 정렬하면 결과가 다음과 같이 나와야 합니다.
+
+PRODUCT_CODE	SALES
+C3000002	126000
+A1000011	90000
+A1000045	16000
+
+
+
+SELECT P.PRODUCT_CODE, SUM(P.PRICE*O.SALES_AMOUNT) AS 'SALES'
+FROM OFFLINE_SALE AS O
+INNER JOIN PRODUCT AS P ON O.PRODUCT_ID = P.PRODUCT_ID
+GROUP BY P.PRODUCT_CODE
+ORDER BY SALES DESC, P.PRODUCT_CODE ASC;
+
+
+
+
 Q16
 Q17
 Q18
