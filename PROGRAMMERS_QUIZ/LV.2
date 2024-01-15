@@ -909,8 +909,97 @@ USER_ID	PRODUCT_ID
 
 
 
+-- 코드를 입력하세요
+SELECT USER_ID, PRODUCT_ID
+FROM ONLINE_SALE
+GROUP BY USER_ID, PRODUCT_ID
+HAVING COUNT(*) > 1
+ORDER BY USER_ID ASC, PRODUCT_ID DESC;
 
 
 
-Q22
-Q23
+
+Q22 문제 설명
+다음은 중고거래 게시판 정보를 담은 USED_GOODS_BOARD 테이블입니다. USED_GOODS_BOARD 테이블은 다음과 같으며 BOARD_ID, WRITER_ID, TITLE, CONTENTS, PRICE, CREATED_DATE, STATUS, VIEWS은 게시글 ID, 작성자 ID, 게시글 제목, 게시글 내용, 가격, 작성일, 거래상태, 조회수를 의미합니다.
+
+Column name	Type	Nullable
+BOARD_ID	VARCHAR(5)	FALSE
+WRITER_ID	VARCHAR(50)	FALSE
+TITLE	VARCHAR(100)	FALSE
+CONTENTS	VARCHAR(1000)	FALSE
+PRICE	NUMBER	FALSE
+CREATED_DATE	DATE	FALSE
+STATUS	VARCHAR(10)	FALSE
+VIEWS	NUMBER	FALSE
+문제
+USED_GOODS_BOARD 테이블에서 2022년 10월 5일에 등록된 중고거래 게시물의 게시글 ID, 작성자 ID, 게시글 제목, 가격, 거래상태를 조회하는 SQL문을 작성해주세요. 거래상태가 SALE 이면 판매중, RESERVED이면 예약중, DONE이면 거래완료 분류하여 출력해주시고, 결과는 게시글 ID를 기준으로 내림차순 정렬해주세요.
+
+예시
+USED_GOODS_BOARD 테이블이 다음과 같을 때
+
+BOARD_ID	WRITER_ID	TITLE	CONTENTS	PRICE	CREATED_DATE	STATUS	VIEWS
+B0007	s2s2123	커피글라인더	새상품처럼 깨끗합니다.	7000	2022-10-04	DONE	210
+B0008	hong02	자전거 판매합니다	출퇴근용으로 구매했다가 사용하지 않아서 내놔요	40000	2022-10-04	SALE	301
+B0009	yawoong67	선반 팝니다	6단 선반. 환불 반품 안됩니다.	12000	2022-10-05	DONE	202
+B0010	keel1990	철제선반5단	철제선반 5단 조립식 팜	10000	2022-10-05	SALE	194
+SQL을 실행하면 다음과 같이 출력되어야 합니다.
+
+BOARD_ID	WRITER_ID	TITLE	PRICE	STATUS
+B0010	keel1990	철제선반5단	10000	판매중
+B0009	yawoong67	선반 팝니다	12000	거래완료
+
+
+
+-- 코드를 입력하세요
+SELECT BOARD_ID, WRITER_ID, TITLE, PRICE,
+       CASE
+           WHEN STATUS = 'SALE' THEN '판매중'
+           WHEN STATUS = 'RESERVED' THEN '예약중'
+           WHEN STATUS = 'DONE' THEN '거래완료'
+       END AS STATUS
+FROM USED_GOODS_BOARD
+WHERE DATE_FORMAT(CREATED_DATE, '%Y-%m-%d') = '2022-10-05'
+ORDER BY BOARD_ID DESC;
+
+
+Q23 문제 설명
+다음은 어느 자동차 대여 회사의 자동차 대여 기록 정보를 담은 CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블입니다. CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블은 아래와 같은 구조로 되어있으며, HISTORY_ID, CAR_ID, START_DATE, END_DATE 는 각각 자동차 대여 기록 ID, 자동차 ID, 대여 시작일, 대여 종료일을 나타냅니다.
+
+Column name	Type	Nullable
+HISTORY_ID	INTEGER	FALSE
+CAR_ID	INTEGER	FALSE
+START_DATE	DATE	FALSE
+END_DATE	DATE	FALSE
+문제
+CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블에서 평균 대여 기간이 7일 이상인 자동차들의 자동차 ID와 평균 대여 기간(컬럼명: AVERAGE_DURATION) 리스트를 출력하는 SQL문을 작성해주세요. 평균 대여 기간은 소수점 두번째 자리에서 반올림하고, 결과는 평균 대여 기간을 기준으로 내림차순 정렬해주시고, 평균 대여 기간이 같으면 자동차 ID를 기준으로 내림차순 정렬해주세요.
+
+예시
+예를 들어 CAR_RENTAL_COMPANY_RENTAL_HISTORY 테이블이 다음과 같다면
+
+HISTORY_ID	CAR_ID	START_DATE	END_DATE
+1	1	2022-09-27	2022-10-01
+2	1	2022-10-03	2022-11-04
+3	2	2022-09-05	2022-09-05
+4	2	2022-09-08	2022-09-10
+5	3	2022-09-16	2022-10-15
+6	1	2022-11-07	2022-12-06
+자동차 별 평균 대여 기간은
+
+자동차 ID가 1인 자동차의 경우, 대여 기간이 각각 5일, 33일, 30일인 기록이 존재하므로 평균 22.7일
+자동차 ID가 2인 자동차의 경우, 대여 기간이 각각 1일, 3일인 기록이 존재하므로 평균 2일
+자동차 ID가 3인 자동차의 경우, 대여 기간이 30일인 기록만 존재하므로 평균 30일 입니다. 평균 대여 기간이 7일 이상인 자동차는 자동차 ID가 1, 3인 자동차이고, 평균 대여 기간 내림차순 및 자동차 ID를 기준으로 내림차순 정렬하면 다음과 같이 나와야 합니다.
+CAR_ID	AVERAGE_DURATION
+3	30.0
+1	22.7
+
+
+-- 코드를 입력하세요
+SELECT CAR_ID, ROUND(AVG(DATEDIFF(END_DATE,START_DATE)+1),1) AS AVERAGE_DURATION
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID
+HAVING AVERAGE_DURATION>=7
+ORDER BY AVERAGE_DURATION DESC, CAR_ID DESC;
+
+
+
+
